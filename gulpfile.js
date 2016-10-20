@@ -16,6 +16,7 @@ var footer = require('gulp-footer');
 var watch = require('gulp-watch');
 var livereload = require('gulp-livereload');
 var package = require('./package.json');
+var cacheBuster = require('gulp-cachebust');
 
 
 // Scripts and tests
@@ -38,7 +39,7 @@ var svgstore = require('gulp-svgstore');
 var markdown = require('gulp-markdown');
 var fileinclude = require('gulp-file-include');
 
-
+var cachebust = new cacheBuster();
 /**
  * Paths to project folders
  */
@@ -83,6 +84,7 @@ gulp.task('build:scripts', ['clean:dist'], function() {
         .pipe(rename, { suffix: '.min' })
         .pipe(uglify)
         .pipe(sourcemaps.write, './')
+        .pipe(cachebust.resources.bind(cachebust))
         .pipe(gulp.dest, paths.scripts.output)
         .pipe(livereload);
 
@@ -122,6 +124,7 @@ gulp.task('build:styles', ['clean:dist'], function() {
                 removeAll: true
             }
         }))
+        .pipe(cachebust.resources())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(paths.styles.output))
         .pipe(livereload());
@@ -185,6 +188,7 @@ gulp.task('build:docs', ['compile', 'clean:docs'], function() {
         }))
         .pipe(header(fs.readFileSync(paths.docs.templates + '/_header.html', 'utf8')))
         .pipe(footer(fs.readFileSync(paths.docs.templates + '/_footer.html', 'utf8')))
+        .pipe(cachebust.references())
         .pipe(gulp.dest(paths.docs.output))
         .pipe(livereload());
 });
