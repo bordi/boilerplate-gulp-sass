@@ -17,6 +17,8 @@ var watch = require('gulp-watch');
 var livereload = require('gulp-livereload');
 var package = require('./package.json');
 var cacheBuster = require('gulp-cachebust');
+var http = require('http');
+var st = require('st');
 
 
 // Scripts and tests
@@ -202,7 +204,8 @@ gulp.task('clean:docs', function () {
 gulp.task('listen', function () {
     livereload.listen({
         host: 'localhost',
-        port: 3000
+        port: 3000,
+        basePath: 'dist'
     });
     gulp.watch(paths.input, ['default']);
 });
@@ -236,6 +239,13 @@ gulp.task('default', [
 
 // Compile files and generate docs when something changes
 gulp.task('watch', [
+    'server',
     'listen',
     'default'
 ]);
+
+gulp.task('server', function(done) {
+    http.createServer(
+        st({ path: __dirname + '/dist', index: 'index.html', cache: false })
+    ).listen(4000, done);
+});

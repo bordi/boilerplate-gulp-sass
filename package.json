@@ -37,7 +37,8 @@
     "gulp-watch": "^4.2.4",
     "jshint-stylish": "^2.0.1",
     "lazypipe": "^0.2.4",
-    "node-fs": "^0.1.7"
+    "node-fs": "^0.1.7",
+    "st": "^1.2.0"
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7"
